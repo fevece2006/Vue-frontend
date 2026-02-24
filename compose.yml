@@ -1,0 +1,9 @@
+services:
+  frontend-productos:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: frontend-productos
+    ports:
+      - '80:80'
+    restart: unless-stopped

@@ -43,6 +43,20 @@ Esta estructura asegura que cada archivo generado esté optimizado para su prop�
 - Se validó cada cambio ejecutando `npm run build:analyze` y revisando el archivo `stats.html` generado.
 - Se documentaron los scripts y el flujo de trabajo en el README y en la checklist de pruebas manuales.
 
+## 8. Nuevas Optimizaciones
+
+### Uso de Plugins Adicionales
+- **Plugin**: `rollup-plugin-obfuscator`.
+- **Ubicación**: Configuración en `vite.config.ts`.
+- **Motivo**: Aumentar la seguridad del código en producción.
+- **Impacto**: Código más difícil de leer y modificar para usuarios malintencionados.
+
+### Validación de Tamaño de Bundle
+- **Cambio**: Configuración de `visualizer` para generar reportes detallados.
+- **Ubicación**: Archivo `vite.config.ts`.
+- **Motivo**: Identificar y reducir dependencias grandes.
+- **Impacto**: Mejor comprensión del tamaño del bundle y optimización continua.
+
 ---
 
 ### Resumen de Técnicas Aplicadas

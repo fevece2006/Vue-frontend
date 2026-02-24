@@ -106,6 +106,85 @@ Organiza el proyecto de la siguiente manera:
 
 ---
 
+## **5. Configuraciones Específicas**
+
+### Configuración de Vite
+- **Archivo**: `vite.config.ts`.
+- **Propósito**: Optimizar el proyecto para producción y desarrollo.
+- **Detalles**:
+  - Alias `@` para rutas más limpias.
+  - Configuración de `manualChunks` para dividir el código en chunks lógicos.
+  - Plugins:
+    - `rollup-plugin-visualizer`: Genera reportes del tamaño del bundle.
+    - `rollup-plugin-obfuscator`: Ofusca el código en producción.
+
+### Configuración de Entornos
+- **Archivos**: `.env.development`, `.env.production`, `.env.devlocal`.
+- **Propósito**: Definir variables de entorno para cada ambiente.
+- **Ejemplo**:
+
+```dotenv
+VITE_API_URL=http://localhost:3000
+```
+
+### Configuración de Axios
+- **Archivo**: `src/infrastructure/http/axiosClient.ts`.
+- **Propósito**: Configurar cliente HTTP con `baseURL` y manejo de tokens JWT.
+- **Detalles**:
+  - `baseURL`: Se obtiene de `VITE_API_URL`.
+  - Interceptores: Añaden encabezados `Authorization` y manejan errores `401`.
+
+### Configuración de PrimeVue
+- **Archivo**: `src/main.ts`.
+- **Propósito**: Registrar PrimeVue y configurar el tema visual.
+- **Detalles**:
+  - Importar y registrar componentes específicos.
+  - Configurar el tema `Aura`.
+
+### Configuración de Rutas
+- **Archivo**: `src/router/index.ts`.
+- **Propósito**: Definir navegación y lazy loading de páginas.
+- **Detalles**:
+  - Uso de `component: () => import('...')` para cargar rutas bajo demanda.
+
+---
+
+## **6. Requisitos Previos**
+
+Antes de comenzar con la configuración del proyecto, asegúrate de cumplir con los siguientes requisitos:
+
+### Requisitos
+- **Node.js**: Versión 16 o superior.
+- **npm**: Versión 8 o superior (se instala junto con Node.js).
+- **Git**: Para clonar repositorios y manejar el control de versiones.
+- **Editor de Código**: Visual Studio Code (recomendado).
+
+### Instalación de Requisitos
+
+#### 1. Instalar Node.js y npm
+- Descarga e instala Node.js desde su [sitio oficial](https://nodejs.org/).
+- Verifica la instalación ejecutando:
+
+```bash
+node -v
+npm -v
+```
+
+#### 2. Instalar Git
+- Descarga e instala Git desde su [sitio oficial](https://git-scm.com/).
+- Verifica la instalación ejecutando:
+
+```bash
+git --version
+```
+
+#### 3. Instalar Visual Studio Code
+- Descarga e instala Visual Studio Code desde su [sitio oficial](https://code.visualstudio.com/).
+
+---
+
+Con estos requisitos instalados, estarás listo para seguir los pasos de configuración descritos en esta guía.
+
 ### **Resumen de Comandos Clave**
 
 - **Crear el proyecto**:

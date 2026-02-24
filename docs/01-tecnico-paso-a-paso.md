@@ -204,3 +204,49 @@ docker compose down
 La aplicación queda disponible en:
 
 - `http://localhost:8080`
+
+## 12) Detalles de Configuración
+
+### Configuración de Entornos
+- **Archivos**: `.env.development`, `.env.production`, `.env.devlocal`.
+- **Ubicación**: Raíz del proyecto.
+- **Propósito**: Definir la variable `VITE_API_URL` para cada entorno.
+- **Ejemplo**:
+
+```dotenv
+VITE_API_URL=http://localhost:3000
+```
+
+### Configuración de Axios
+- **Archivo**: `src/infrastructure/http/axiosClient.ts`.
+- **Propósito**: Configurar `baseURL` con `VITE_API_URL` y manejar tokens JWT.
+- **Detalles**:
+  - Interceptor para añadir `Authorization: Bearer <token>`.
+  - Limpieza de token en caso de error `401`.
+
+### Configuración de PrimeVue
+- **Archivo**: `src/main.ts`.
+- **Propósito**: Registrar PrimeVue con el tema `Aura` y componentes necesarios.
+- **Detalles**:
+  - Importar `primeicons`.
+  - Registrar componentes específicos.
+
+### Lazy Loading
+- **Archivos**: `src/router/index.ts`, componentes en `src/modules`.
+- **Propósito**: Implementar carga asíncrona de rutas y componentes.
+- **Detalles**:
+  - Rutas: `component: () => import('...')`.
+  - Componentes: `defineAsyncComponent(() => import('...'))`.
+
+### Chunking con Vite
+- **Archivo**: `vite.config.ts`.
+- **Propósito**: Dividir el código en chunks lógicos.
+- **Detalles**:
+  - Configuración de `manualChunks` para separar `vendor-vue`, `vendor-data`, `vendor-ui`.
+
+### Docker y NGINX
+- **Archivo**: `compose.yml`.
+- **Propósito**: Configurar y desplegar la aplicación en un contenedor Docker con NGINX.
+- **Detalles**:
+  - Construcción de imagen con `docker compose up --build -d`.
+  - Publicación en `http://localhost:8080`.

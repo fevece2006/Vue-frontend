@@ -11,13 +11,13 @@ Principio clave:
 
 ## 2. Capas usadas en este proyecto
 
-## Capa 1: Domain (`src/core/domain`)
+### Capa 1: Domain (`src/core/domain`)
 
-Responsabilidad:
+**Responsabilidad**:
 
 - Definir el modelo del negocio y contratos puros.
 
-Contenido actual:
+**Contenido actual**:
 
 - Entidades:
   - `entities/Category.ts`
@@ -26,33 +26,33 @@ Contenido actual:
   - `repositories/CategoryRepository.ts`
   - `repositories/ProductRepository.ts`
 
-Regla:
+**Regla**:
 
 - No importa Vue, Axios, Pinia ni librerías de infraestructura.
 
-## Capa 2: Application (`src/core/application`)
+### Capa 2: Application (`src/core/application`)
 
-Responsabilidad:
+**Responsabilidad**:
 
 - Implementar casos de uso del negocio.
 
-Contenido actual:
+**Contenido actual**:
 
 - `use-cases/category/CategoryUseCases.ts`
 - `use-cases/product/ProductUseCases.ts`
 
-Qué hace:
+**Qué hace**:
 
 - Orquesta acciones del sistema (`list`, `create`, `update`, `remove`) usando interfaces del dominio.
 - No sabe si los datos vienen de HTTP, cache, localStorage o base de datos.
 
-## Capa 3: Infrastructure (`src/infrastructure`)
+### Capa 3: Infrastructure (`src/infrastructure`)
 
-Responsabilidad:
+**Responsabilidad**:
 
 - Implementar detalles técnicos concretos.
 
-Contenido actual:
+**Contenido actual**:
 
 - Cliente HTTP:
   - `http/axiosClient.ts`
@@ -62,18 +62,18 @@ Contenido actual:
 - Composición de dependencias:
   - `container.ts`
 
-Qué hace:
+**Qué hace**:
 
 - Traduce las interfaces del dominio a llamadas reales REST.
 - Configura JWT y manejo de `401` en interceptores.
 
-## Capa 4: Presentation (`src/modules`, `src/router`, `src/App.vue`, `src/main.ts`)
+### Capa 4: Presentation (`src/modules`, `src/router`, `src/App.vue`, `src/main.ts`)
 
-Responsabilidad:
+**Responsabilidad**:
 
 - Mostrar UI y manejar interacción del usuario.
 
-Contenido actual:
+**Contenido actual**:
 
 - Módulos por feature:
   - `modules/auth`
@@ -85,20 +85,20 @@ Contenido actual:
   - `App.vue`
   - `main.ts`
 
-Qué hace:
+**Qué hace**:
 
 - Formularios, tablas, diálogo, validación y navegación.
 - Invoca composables que consumen casos de uso.
 
 ## 3. Regla de dependencias (la más importante)
 
-Dirección permitida:
+**Dirección permitida**:
 
 - Presentation → Application → Domain
 - Infrastructure → Domain
 - Infrastructure → Application (solo para construir dependencias en `container.ts`)
 
-Dirección NO permitida:
+**Dirección NO permitida**:
 
 - Domain → Infrastructure
 - Domain → Presentation

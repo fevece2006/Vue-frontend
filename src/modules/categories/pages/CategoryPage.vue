@@ -1,34 +1,63 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useCategories } from '@/modules/categories/composables/useCategories';
-import type { Category } from '@/core/domain/entities/Category';
-import { useToast } from 'primevue/usetoast';
+import { ref } from 'vue'
+import { useCategories } from '@/modules/categories/composables/useCategories'
+import type { Category, CategoryCreateInput } from '@/core/domain/entities/Category'
+import { useToast } from 'primevue/usetoast'
 
-const { categoriesQuery, removeCategoryMutation } = useCategories();
-const showDialog = ref(false);
-const currentCategory = ref<Category | null>(null);
-const toast = useToast();
+import Dialog from 'primevue/dialog'
+import CategoryForm from '@/modules/categories/components/CategoryForm.vue'
+
+const { categoriesQuery, createCategoryMutation, updateCategoryMutation, removeCategoryMutation } =
+  useCategories()
+
+const showDialog = ref(false)
+const currentCategory = ref<Category | null>(null)
+const toast = useToast()
 
 const createNewCategory = () => {
-  currentCategory.value = null;
-  showDialog.value = true;
-};
+  currentCategory.value = null
+  showDialog.value = true
+}
 
 const editCategory = (category: Category) => {
-  currentCategory.value = { ...category };
-  showDialog.value = true;
-};
+  currentCategory.value = { ...category }
+  showDialog.value = true
+}
+
+const closeDialog = () => {
+  showDialog.value = false
+}
+
+const submitForm = async (payload: CategoryCreateInput) => {
+  try {
+    if (currentCategory.value?.id) {
+      await updateCategoryMutation.mutateAsync({
+        id: currentCategory.value.id,
+        ...payload,
+      } as any)
+
+      toast.add({ severity: 'success', summary: 'OK', detail: 'Categoría actualizada' })
+    } else {
+      await createCategoryMutation.mutateAsync(payload)
+      toast.add({ severity: 'success', summary: 'OK', detail: 'Categoría creada' })
+    }
+
+    closeDialog()
+  } catch (e) {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar' })
+  }
+}
 
 const deleteCategory = async (id: string) => {
-  if (!id) return;
+  if (!id) return
 
   try {
-    await removeCategoryMutation.mutateAsync(id);
-    toast.add({ severity: 'success', summary: 'Success', detail: 'Category deleted successfully' });
+    await removeCategoryMutation.mutateAsync(id)
+    toast.add({ severity: 'success', summary: 'OK', detail: 'Categoría eliminada' })
   } catch (error) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete category' });
+    toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar' })
   }
-};
+}
 </script>
 
 <template>
@@ -36,7 +65,12 @@ const deleteCategory = async (id: string) => {
     <template #content>
       <div class="page-header">
         <h1 class="page-title">Mantenimiento de Categorías</h1>
-        <Button label="Nueva categoría" icon="pi pi-plus" class="p-button-success" @click="createNewCategory" />
+        <Button
+          label="Nueva categoría"
+          icon="pi pi-plus"
+          class="p-button-success"
+          @click="createNewCategory"
+        />
       </div>
 
       <DataTable
@@ -52,7 +86,12 @@ const deleteCategory = async (id: string) => {
         <Column header="Acciones" style="width: 180px">
           <template #body="{ data }">
             <div class="dialog-actions">
-              <Button label="Editar" icon="pi pi-pencil" class="p-button-text" @click="editCategory(data)" />
+              <Button
+                label="Editar"
+                icon="pi pi-pencil"
+                class="p-button-text"
+                @click="editCategory(data)"
+              />
               <Button
                 label="Eliminar"
                 icon="pi pi-trash"
@@ -65,11 +104,29 @@ const deleteCategory = async (id: string) => {
         </Column>
       </DataTable>
 
-      <p v-if="!categoriesQuery.data.value || categoriesQuery.data.value.length === 0" class="no-data-message">
+      <p
+        v-if="!categoriesQuery.data.value || categoriesQuery.data.value.length === 0"
+        class="no-data-message"
+      >
         No hay categorías disponibles.
       </p>
     </template>
   </Card>
+
+  <Dialog
+    v-model:visible="showDialog"
+    :header="currentCategory ? 'Editar categoría' : 'Nueva categoría'"
+    modal
+    style="width: 520px; max-width: 95vw"
+    @hide="closeDialog"
+  >
+    <CategoryForm
+      :model-value="currentCategory"
+      :loading="createCategoryMutation.isPending.value || updateCategoryMutation.isPending.value"
+      @submit="submitForm"
+      @cancel="closeDialog"
+    />
+  </Dialog>
 
   <ConfirmDialog />
 </template>

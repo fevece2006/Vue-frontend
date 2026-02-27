@@ -1,42 +1,67 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useCategories } from '@/modules/categories/composables/useCategories';
-import { useProducts } from '@/modules/products/composables/useProducts';
-import type { Product } from '@/core/domain/entities/Product';
-import { useToast } from 'primevue/usetoast';
+import { computed, ref } from 'vue'
+import { useCategories } from '@/modules/categories/composables/useCategories'
+import { useProducts } from '@/modules/products/composables/useProducts'
+import type { Product, ProductCreateInput } from '@/core/domain/entities/Product'
+import { useToast } from 'primevue/usetoast'
 
-const { categoriesQuery } = useCategories();
-const { productsQuery, removeProductMutation } = useProducts();
-const showDialog = ref(false);
-const currentProduct = ref<Product | null>(null);
-const toast = useToast();
+import ProductForm from '@/modules/products/components/ProductForm.vue'
+
+const { categoriesQuery } = useCategories()
+const { productsQuery, createProductMutation, updateProductMutation, removeProductMutation } = useProducts()
+
+const showForm = ref(false)
+const currentProduct = ref<Product | null>(null)
+const toast = useToast()
+
+const categories = computed(() => categoriesQuery.data.value ?? [])
 
 const categoryNameById = (categoryId: string) => {
-  const category = categoriesQuery.data.value?.find((item) => item.id === categoryId);
-  return category?.name ?? '-';
-};
+  const category = categoriesQuery.data.value?.find((item) => item.id === categoryId)
+  return category?.name ?? '-'
+}
 
 const createNewProduct = () => {
-  currentProduct.value = null;
-  showDialog.value = true;
-};
+  currentProduct.value = null
+  showForm.value = true
+}
 
 const editProduct = (product: Product) => {
-  currentProduct.value = { ...product };
-  showDialog.value = true;
-};
+  currentProduct.value = { ...product }
+  showForm.value = true
+}
+
+const closeForm = () => {
+  showForm.value = false
+}
+
+const submitForm = async (payload: ProductCreateInput) => {
+  try {
+    if (currentProduct.value?.id) {
+      await updateProductMutation.mutateAsync({
+        id: currentProduct.value.id,
+        ...payload,
+      } as any)
+      toast.add({ severity: 'success', summary: 'OK', detail: 'Producto actualizado' })
+    } else {
+      await createProductMutation.mutateAsync(payload)
+      toast.add({ severity: 'success', summary: 'OK', detail: 'Producto creado' })
+    }
+
+    closeForm()
+  } catch (error) {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar el producto' })
+  }
+}
 
 const deleteProduct = async (productId: string) => {
   try {
-    await removeProductMutation.mutateAsync(productId);
-    toast.add({ severity: 'success', summary: 'Success', detail: 'Product deleted successfully' });
+    await removeProductMutation.mutateAsync(productId)
+    toast.add({ severity: 'success', summary: 'OK', detail: 'Producto eliminado' })
   } catch (error) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete product' });
+    toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el producto' })
   }
-};
-
-// Debugging log to verify data flow
-console.log('Products data:', productsQuery.data.value);
+}
 </script>
 
 <template>
@@ -44,7 +69,27 @@ console.log('Products data:', productsQuery.data.value);
     <template #content>
       <div class="page-header">
         <h1 class="page-title">Mantenimiento de Productos</h1>
-        <Button label="Nuevo producto" icon="pi pi-plus" class="p-button-success" @click="createNewProduct" />
+        <Button
+          label="Nuevo producto"
+          icon="pi pi-plus"
+          class="p-button-success"
+          @click="createNewProduct"
+        />
+      </div>
+
+      <!-- FORM INLINE (OPCIÓN B) -->
+      <div v-if="showForm" class="mb-4">
+        <Card>
+          <template #content>
+            <ProductForm
+              :model-value="currentProduct"
+              :categories="categories"
+              :loading="createProductMutation.isPending.value || updateProductMutation.isPending.value"
+              @submit="submitForm"
+              @cancel="closeForm"
+            />
+          </template>
+        </Card>
       </div>
 
       <div class="grid">

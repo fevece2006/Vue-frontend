@@ -9,12 +9,20 @@ import { useAuthStore } from '@/modules/auth/stores/auth.store'
 const router = useRouter()
 const authStore = useAuthStore()
 
+const goHome = () => router.push('/principal')
+
 const menuItems = computed(() => {
   if (!authStore.isAuthenticated) {
     return [{ label: 'Iniciar sesión', command: () => router.push('/login') }]
   }
 
   return [
+    {
+      label: 'Home', // requerido para que el item se pinte bien
+      icon: 'pi pi-home',
+      command: goHome,
+      class: 'menu-home', // para ocultar el texto y dejar solo el icono
+    },
     {
       label: 'Mantenimiento',
       items: [
@@ -26,7 +34,7 @@ const menuItems = computed(() => {
 })
 
 const closeSession = () => {
-  authStore.clearToken()
+  authStore.logout()
   router.push('/login')
 }
 </script>
@@ -37,6 +45,7 @@ const closeSession = () => {
       <template #start>
         <!-- Eliminado el texto innecesario -->
       </template>
+
       <template #end>
         <Button
           v-if="authStore.isAuthenticated"
@@ -51,6 +60,19 @@ const closeSession = () => {
     <main class="app-content">
       <RouterView />
     </main>
+
     <Toast />
   </div>
 </template>
+
+<style scoped>
+/* Oculta el texto "Home" pero deja el ícono visible */
+:deep(.menu-home .p-menuitem-text) {
+  display: none;
+}
+
+/* Opcional: aumenta el área clickeable y centra el icono */
+:deep(.menu-home .p-menuitem-link) {
+  padding: 0.75rem;
+}
+</style>

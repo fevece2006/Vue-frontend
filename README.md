@@ -13,6 +13,14 @@ Proyecto de mantenimiento de categorías y productos con:
 
 Archivo de orquestación Docker Compose: `compose.yml`.
 
+Guía para inspeccionar el contenedor y ver los archivos desplegados:
+
+- `docs/12-contenedor.md`
+
+Guía de rutas, `<RouterView />` y navegación:
+
+- `docs/13-rutas.md`
+
 ## Configuración de entorno
 
 - Desarrollo (`npm run dev`): `.env.development` → `VITE_API_URL=http://localhost:9090`
@@ -55,9 +63,37 @@ npm run preview
 - `npm run build:analyze`
 - `npm run preview`
 
+## Docker
+
+### Opción A: docker build / docker run
+
+```bash
+docker build -t frontend-productos .
+
+docker run -d -p 80:80 --name frontend-productos frontend-productos
+```
+
+App disponible en `http://localhost/`.
+
+Para entrar al contenedor y ver los archivos desplegados (NGINX): ver `docs/12-contenedor.md`.
+
+### Opción B: Docker Compose
+
+```bash
+docker compose up --build -d
+```
+
+Para apagar:
+
+```bash
+docker compose down
+```
+
 ## Documentación para clase
 
 - `docs/01-tecnico-paso-a-paso.md`
 - `docs/02-tecnico-estructura-archivos.md`
 - `docs/03-funcional-paso-a-paso.md`
+- `docs/12-contenedor.md`
+- `docs/13-rutas.md`
 - `docs/06-checklist-prueba-manual-api.md`

@@ -1,5 +1,9 @@
 # Estructura técnica del proyecto (explicada para clase)
 
+> Docker: para entrar al contenedor y ver los archivos desplegados (NGINX en `/usr/share/nginx/html`), ver [12-contenedor.md](12-contenedor.md).
+
+> Rutas y navegación (RouterView, guards, layout autenticado): ver [13-rutas.md](13-rutas.md).
+
 ## 1) Archivos de la raíz
 
 ### `package.json`
@@ -34,18 +38,20 @@
 
 ### `Dockerfile`
 
-- ¿Qué hace?: construye la app y la publica con NGINX en una imagen Docker.
+- ¿Qué hace?: construye la app (Vite) y la publica con NGINX en una imagen Docker.
 - ¿Para qué sirve?: desplegar el frontend en cualquier entorno de forma estandarizada.
+- ¿Detalle clave?: copia el contenido de `dist/` a `/usr/share/nginx/html`.
 
 ### `compose.yml`
 
 - ¿Qué hace?: define cómo levantar el contenedor del frontend.
-- ¿Para qué sirve?: simplifica la ejecución local y de pruebas con Docker Compose.
+- ¿Para qué sirve?: simplifica la ejecución local y de pruebas con Docker Compose (alternativa a `docker run`).
 
 ### `nginx.conf`
 
 - ¿Qué hace?: configura NGINX y redirige rutas SPA a `index.html`.
 - ¿Para qué sirve?: evitar errores 404 al refrescar rutas de Vue Router.
+- ¿Dónde sirve la app?: desde `/usr/share/nginx/html`.
 
 ## 2) Carpeta `src`
 
@@ -56,13 +62,25 @@
 
 ### `src/App.vue`
 
-- ¿Qué hace?: define el layout base (menú, zona de contenido y logout).
-- ¿Para qué sirve?: ofrecer estructura visual común para todos los módulos.
+- ¿Qué hace?: define el contenedor raíz (app shell) e incluye el `<RouterView />` principal.
+- ¿Para qué sirve?: servir como punto de montaje de la navegación (el router renderiza layouts/páginas dentro del `RouterView`).
+- Nota: el menú y el layout autenticado viven en `src/layouts/AuthenticatedLayout.vue`.
+
+### `src/layouts/AuthenticatedLayout.vue`
+
+- ¿Qué hace?: layout para rutas privadas (muestra el menú y un `<RouterView />` anidado para las páginas hijas).
+- ¿Para qué sirve?: mantener el menú fuera de `App.vue` y agrupar la zona autenticada.
+
+### `src/modules/shared/navigation/menuItems.ts`
+
+- ¿Qué hace?: centraliza la configuración de items del menú autenticado.
+- ¿Para qué sirve?: evitar hardcodear navegación en el layout y navegar por `ROUTE_NAMES`.
 
 ### `src/router/index.ts`
 
 - ¿Qué hace?: define rutas con lazy loading y guards por autenticación.
 - ¿Para qué sirve?: controlar navegación y proteger páginas privadas con JWT.
+- Nota: las rutas privadas están anidadas bajo el layout `AuthenticatedLayout` (doble `RouterView`).
 
 ## 3) Clean Architecture en `src/core`
 

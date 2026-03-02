@@ -2,9 +2,10 @@ import { createApp } from 'vue'
 import PrimeVue from 'primevue/config'
 import Aura from '@primeuix/themes/aura'
 import { VueQueryPlugin } from '@tanstack/vue-query'
-import { createPinia } from 'pinia'
 import ToastService from 'primevue/toastservice'
+import ConfirmationService from 'primevue/confirmationservice'
 import router from './router'
+import { pinia } from '@/plugins/pinia'
 import './style.css'
 import App from './App.vue'
 import Button from 'primevue/button';
@@ -15,10 +16,11 @@ import ConfirmDialog from 'primevue/confirmdialog';
 
 const app = createApp(App)
 
-app.use(createPinia())
+app.use(pinia)
 app.use(router)
 app.use(VueQueryPlugin)
 app.use(ToastService)
+app.use(ConfirmationService)
 app.use(PrimeVue, {
 	ripple: true,
 	theme: {

@@ -1,5 +1,9 @@
 # Optimización de Performance en el Frontend
 
+> Docker: para entrar al contenedor y ver los archivos desplegados (NGINX en `/usr/share/nginx/html`), ver [12-contenedor.md](12-contenedor.md).
+
+> Rutas y navegación (RouterView, guards, layout autenticado): ver [13-rutas.md](13-rutas.md).
+
 Este documento describe, paso a paso, las técnicas y cambios aplicados para mejorar la performance del proyecto Vue 3 + Vite, detallando las decisiones y su impacto en el bundle final.
 
 ## 1. Análisis Inicial del Bundle

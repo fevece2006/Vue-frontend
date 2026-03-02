@@ -1,5 +1,9 @@
 # Guía para Crear el Proyecto desde Cero
 
+> Docker: para entrar al contenedor y ver los archivos desplegados (NGINX en `/usr/share/nginx/html`), ver [12-contenedor.md](12-contenedor.md).
+
+> Rutas y navegación (RouterView, guards, layout autenticado): ver [13-rutas.md](13-rutas.md).
+
 Este documento detalla los pasos, comandos y convenciones para crear el proyecto desde cero, incluyendo la estructura, creación de componentes, y cómo testear el proyecto con las DevTools de Vue.
 
 ---

@@ -24,6 +24,9 @@ export default [
         window: 'readonly',
         document: 'readonly',
         localStorage: 'readonly',
+        CustomEvent: 'readonly',
+        Event: 'readonly',
+        process: 'readonly',
       },
     },
     plugins: {

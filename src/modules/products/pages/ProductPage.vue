@@ -2,8 +2,9 @@
 import { computed, ref } from 'vue'
 import { useCategories } from '@/modules/categories/composables/useCategories'
 import { useProducts } from '@/modules/products/composables/useProducts'
-import type { Product, ProductCreateInput } from '@/core/domain/entities/Product'
+import type { Product, ProductCreateInput, ProductUpdateInput } from '@/core/domain/entities/Product'
 import { useToast } from 'primevue/usetoast'
+import { useConfirmDelete } from '@/modules/shared/composables/useConfirmDelete'
 
 import ProductForm from '@/modules/products/components/ProductForm.vue'
 
@@ -13,6 +14,7 @@ const { productsQuery, createProductMutation, updateProductMutation, removeProdu
 const showForm = ref(false)
 const currentProduct = ref<Product | null>(null)
 const toast = useToast()
+const { confirmDelete } = useConfirmDelete()
 
 const categories = computed(() => categoriesQuery.data.value ?? [])
 
@@ -38,10 +40,12 @@ const closeForm = () => {
 const submitForm = async (payload: ProductCreateInput) => {
   try {
     if (currentProduct.value?.id) {
-      await updateProductMutation.mutateAsync({
+      const updatePayload: ProductUpdateInput = {
         id: currentProduct.value.id,
         ...payload,
-      } as any)
+      }
+
+      await updateProductMutation.mutateAsync(updatePayload)
       toast.add({ severity: 'success', summary: 'OK', detail: 'Producto actualizado' })
     } else {
       await createProductMutation.mutateAsync(payload)
@@ -49,18 +53,26 @@ const submitForm = async (payload: ProductCreateInput) => {
     }
 
     closeForm()
-  } catch (error) {
+  } catch {
     toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar el producto' })
   }
 }
 
-const deleteProduct = async (productId: string) => {
-  try {
-    await removeProductMutation.mutateAsync(productId)
-    toast.add({ severity: 'success', summary: 'OK', detail: 'Producto eliminado' })
-  } catch (error) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el producto' })
-  }
+const deleteProduct = (product: Product) => {
+  if (!product?.id) return
+
+  confirmDelete({
+    header: 'Eliminar producto',
+    message: `¿Seguro que deseas eliminar el producto "${product.name}" (ID: ${product.id})?`,
+    onAccept: async () => {
+      try {
+        await removeProductMutation.mutateAsync(product.id)
+        toast.add({ severity: 'success', summary: 'OK', detail: 'Producto eliminado' })
+      } catch {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el producto' })
+      }
+    },
+  })
 }
 </script>
 
@@ -119,7 +131,7 @@ const deleteProduct = async (productId: string) => {
                     icon="pi pi-trash"
                     class="p-button-danger p-button-text"
                     :loading="removeProductMutation.isPending.value"
-                    @click="deleteProduct(data.id)"
+                    @click="deleteProduct(data)"
                   />
                 </div>
               </template>
@@ -133,6 +145,4 @@ const deleteProduct = async (productId: string) => {
       </div>
     </template>
   </Card>
-
-  <ConfirmDialog />
 </template>

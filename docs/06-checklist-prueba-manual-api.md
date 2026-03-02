@@ -1,5 +1,9 @@
 # Checklist de prueba manual (Frontend + Backend API)
 
+> Docker: para entrar al contenedor y ver los archivos desplegados (NGINX en `/usr/share/nginx/html`), ver [12-contenedor.md](12-contenedor.md).
+
+> Rutas y navegación (RouterView, guards, layout autenticado): ver [13-rutas.md](13-rutas.md).
+
 Este checklist valida el frontend contra los endpoints documentados en `BACKEND_API_TESTING_GUIDE.md`.
 
 ## 0) Preparación

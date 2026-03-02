@@ -1,14 +1,19 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-
-const TOKEN_KEY = 'jwt_token'
+import { tokenStorage } from '@/infrastructure/auth/tokenStorage'
 
 export const useAuthStore = defineStore('auth', () => {
   /* ======================
      STATE
   ====================== */
 
-  const token = ref<string | null>(localStorage.getItem(TOKEN_KEY))
+  const token = ref<string | null>(tokenStorage.get())
+
+  // Mantiene el store sincronizado si otra parte de la app limpia/setea el token
+  // (por ejemplo, interceptores HTTP ante 401)
+  tokenStorage.subscribe((value) => {
+    token.value = value
+  })
 
   /* ======================
      GETTERS
@@ -24,12 +29,12 @@ export const useAuthStore = defineStore('auth', () => {
 
   const setToken = (value: string) => {
     token.value = value
-    localStorage.setItem(TOKEN_KEY, value)
+    tokenStorage.set(value)
   }
 
   const logout = () => {
     token.value = null
-    localStorage.removeItem(TOKEN_KEY)
+    tokenStorage.clear()
   }
 
   return {

@@ -1,5 +1,9 @@
 # Guía Detallada para Crear el Proyecto
 
+> Docker: para entrar al contenedor y ver los archivos desplegados (NGINX en `/usr/share/nginx/html`), ver [12-contenedor.md](12-contenedor.md).
+
+> Rutas y navegación (RouterView, guards, layout autenticado): ver [13-rutas.md](13-rutas.md).
+
 Este documento proporciona una guía ampliada y detallada para crear el proyecto desde cero, explicando cada paso y cómo implementarlo.
 
 ---
@@ -118,38 +122,27 @@ Este documento proporciona una guía ampliada y detallada para crear el proyecto
        ```
 
    - **`src/App.vue`**:
-     - Define el contenedor principal de la aplicación:
+     - Define el contenedor principal (app shell) y el `<RouterView />` donde el router renderiza layouts/páginas:
        ```vue
-       <template>
-         <router-view />
-       </template>
-
-       <script setup>
+       <script setup lang="ts">
+       import Toast from 'primevue/toast'
        </script>
 
-       <style>
-       /* Estilos globales */
-       </style>
+       <template>
+         <div class="app-shell">
+           <RouterView />
+           <Toast />
+         </div>
+       </template>
        ```
 
    - **`src/router/index.ts`**:
-     - Configura las rutas principales:
+     - Configura las rutas principales, los nombres de ruta y los guards (auth/guest). En este proyecto las rutas privadas se agrupan bajo un layout (`AuthenticatedLayout`) con rutas hijas:
        ```typescript
-       import { createRouter, createWebHistory } from 'vue-router';
-
-       const routes = [
-         {
-           path: '/',
-           component: () => import('@/modules/shared/pages/HomePage.vue'),
-         },
-       ];
-
-       const router = createRouter({
-         history: createWebHistory(),
-         routes,
-       });
-
-       export default router;
+       // Ver implementación real en src/router/index.ts
+       // - ROUTE_NAMES
+       // - AuthenticatedLayout + children
+       // - router.beforeEach(...) (requiresAuth / guestOnly)
        ```
 
 ---

@@ -1,5 +1,9 @@
 # Proyecto Vue 3.5 paso a paso (Técnico)
 
+> Docker: para entrar al contenedor y ver los archivos desplegados (NGINX en `/usr/share/nginx/html`), ver [12-contenedor.md](12-contenedor.md).
+
+> Rutas y navegación (RouterView, guards, layout autenticado): ver [13-rutas.md](13-rutas.md).
+
 ## 1) Crear el proyecto
 
 ```bash
@@ -174,9 +178,28 @@ npm run preview
 
 - Ejecuta localmente la build de producción para validación previa al despliegue.
 
-## 11) Docker + NGINX + Docker Compose
+## 11) Docker + NGINX (Docker run o Docker Compose)
 
-Archivo estándar usado en este proyecto:
+Este proyecto genera la build en `dist/` y la sirve con NGINX dentro del contenedor.
+
+### Opción A: docker build + docker run (rápido)
+
+```bash
+docker build -t frontend-productos .
+
+docker run -d -p 80:80 --name frontend-productos frontend-productos
+```
+
+Apagar / eliminar:
+
+```bash
+docker stop frontend-productos
+docker rm frontend-productos
+```
+
+### Opción B: Docker Compose
+
+Archivo usado en este repo:
 
 - `compose.yml`
 
@@ -186,24 +209,15 @@ Levantar contenedor:
 docker compose up --build -d
 ```
 
-¿Para qué sirve?
-
-- Construye la imagen Docker y levanta el contenedor en segundo plano.
-- Publica la app en NGINX usando la configuración de `compose.yml`.
-
 Apagar contenedor:
 
 ```bash
 docker compose down
 ```
 
-¿Para qué sirve?
-
-- Detiene y elimina los contenedores creados por Docker Compose.
-
 La aplicación queda disponible en:
 
-- `http://localhost:8080`
+- `http://localhost/` (puerto 80)
 
 ## 12) Detalles de Configuración
 
@@ -245,8 +259,9 @@ VITE_API_URL=http://localhost:3000
   - Configuración de `manualChunks` para separar `vendor-vue`, `vendor-data`, `vendor-ui`.
 
 ### Docker y NGINX
-- **Archivo**: `compose.yml`.
-- **Propósito**: Configurar y desplegar la aplicación en un contenedor Docker con NGINX.
+- **Archivos**: `Dockerfile`, `nginx.conf` y (opcional) `compose.yml`.
+- **Propósito**: Construir la app y servirla con NGINX dentro de un contenedor.
 - **Detalles**:
-  - Construcción de imagen con `docker compose up --build -d`.
-  - Publicación en `http://localhost:8080`.
+  - Build en `dist/` y copia a `/usr/share/nginx/html`.
+  - Publicación en `http://localhost/` (puerto 80).
+  - Para inspeccionar el contenedor y ver los archivos desplegados: [12-contenedor.md](12-contenedor.md).

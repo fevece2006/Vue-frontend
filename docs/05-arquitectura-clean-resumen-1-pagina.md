@@ -1,5 +1,9 @@
 # Clean Architecture (Resumen 1 página)
 
+> Docker: para entrar al contenedor y ver los archivos desplegados (NGINX en `/usr/share/nginx/html`), ver [12-contenedor.md](12-contenedor.md).
+
+> Rutas y navegación (RouterView, guards, layout autenticado): ver [13-rutas.md](13-rutas.md).
+
 ## Objetivo
 
 Separar responsabilidades para construir un frontend mantenible, escalable y fácil de probar.

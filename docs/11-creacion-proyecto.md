@@ -1,5 +1,9 @@
 # Guía Paso a Paso para Crear el Proyecto
 
+> Docker: para entrar al contenedor y ver los archivos desplegados (NGINX en `/usr/share/nginx/html`), ver [12-contenedor.md](12-contenedor.md).
+
+> Rutas y navegación (RouterView, guards, layout autenticado): ver [13-rutas.md](13-rutas.md).
+
 Este documento detalla el paso a paso para crear el proyecto desde cero, siguiendo las mejores prácticas y la arquitectura Clean.
 
 ---

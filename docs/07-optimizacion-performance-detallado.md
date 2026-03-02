@@ -1,5 +1,9 @@
 # Optimización de Performance - Documento Detallado
 
+> Docker: para entrar al contenedor y ver los archivos desplegados (NGINX en `/usr/share/nginx/html`), ver [12-contenedor.md](12-contenedor.md).
+
+> Rutas y navegación (RouterView, guards, layout autenticado): ver [13-rutas.md](13-rutas.md).
+
 Este documento explica las optimizaciones realizadas en el proyecto Vue 3 + Vite, detallando el propósito de cada cambio, sus ventajas y ejemplos de implementación en el código.
 
 ## 1. Análisis del Bundle

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { tokenStorage } from '@/infrastructure/auth/tokenStorage'
 
 export const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:8080',
@@ -7,8 +8,6 @@ export const axiosClient = axios.create({
     'Content-Type': 'application/json',
   },
 })
-
-console.log('Axios baseURL:', axiosClient.defaults.baseURL);
 
 type ApiErrorResponse = {
   message?: string
@@ -24,7 +23,7 @@ export const getApiErrorMessage = (error: unknown, fallback: string): string => 
 }
 
 axiosClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('jwt_token')
+  const token = tokenStorage.get()
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
@@ -37,7 +36,7 @@ axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('jwt_token')
+      tokenStorage.clear()
     }
 
     return Promise.reject(error)

@@ -1,5 +1,9 @@
 # Cambios Necesarios para Implementar un Monorepo
 
+> Docker: para entrar al contenedor y ver los archivos desplegados (NGINX en `/usr/share/nginx/html`), ver [12-contenedor.md](12-contenedor.md).
+
+> Rutas y navegación (RouterView, guards, layout autenticado): ver [13-rutas.md](13-rutas.md).
+
 Este documento describe los cambios necesarios para migrar el proyecto actual a una estructura de monorepo, utilizando herramientas modernas para la gestión de múltiples proyectos y paquetes compartidos.
 
 ---

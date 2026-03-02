@@ -1,5 +1,9 @@
 # Arquitectura Clean en este proyecto
 
+> Docker: para entrar al contenedor y ver los archivos desplegados (NGINX en `/usr/share/nginx/html`), ver [12-contenedor.md](12-contenedor.md).
+
+> Rutas y navegación (RouterView, guards, layout autenticado): ver [13-rutas.md](13-rutas.md).
+
 ## 1. ¿Qué es Clean Architecture?
 
 Clean Architecture organiza el sistema en capas para separar responsabilidades y reducir acoplamiento.

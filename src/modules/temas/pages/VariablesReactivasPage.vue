@@ -13,6 +13,8 @@ const increment = (): void => {
   console.log(counter)
 }
 
+
+
 /**
  * Sección 2: variable reactiva con ref
  * Esto SÍ actualizará el DOM.
@@ -21,6 +23,11 @@ const counterRef = ref(0)
 const incrementRef = (): void => {
   counterRef.value++
 }
+
+const decrementRef = (): void => {
+  counterRef.value--
+}
+
 </script>
 
 <template>
@@ -80,6 +87,10 @@ const incrementRef = (): void => {
 
             <div class="actions">
               <button type="button" class="btn" @click="incrementRef">Click increment</button>
+            </div>
+
+						            <div class="actions">
+              <button type="button" class="btn" @click="decrementRef">Click decrement</button>
             </div>
 
             <p class="hint">

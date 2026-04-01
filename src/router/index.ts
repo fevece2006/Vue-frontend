@@ -11,6 +11,13 @@ export const ROUTE_NAMES = {
   directivas: 'directivas',
   eventos: 'eventos',
   variablesReactivas: 'variables-reactivas',
+  formulariosBasicos: 'formularios-basicos',
+  modificadores: 'formularios-modificadores',
+  validacionComposables: 'formularios-validacion',
+  formulariosDinamicos: 'formularios-dinamicos',
+  useForm: 'formularios-useform',
+  veeValidate: 'formularios-veevalidate',
+  casoPractico: 'formularios-caso-practico',
 } as const
 
 type RouteMetaAuth = {
@@ -70,6 +77,42 @@ const routes: RouteRecordRaw[] = [
         path: 'variables-reactivas',
         name: ROUTE_NAMES.variablesReactivas,
         component: () => import('@/modules/temas/pages/VariablesReactivasPage.vue'),
+      },
+      // ── Formularios en Vue 3 ──────────────────────────────────────────
+      {
+        path: 'formularios/basicos',
+        name: ROUTE_NAMES.formulariosBasicos,
+        component: () => import('@/modules/temas/pages/formularios/FormulariosBasicosPage.vue'),
+      },
+      {
+        path: 'formularios/modificadores',
+        name: ROUTE_NAMES.modificadores,
+        component: () => import('@/modules/temas/pages/formularios/ModificadoresPage.vue'),
+      },
+      {
+        path: 'formularios/validacion',
+        name: ROUTE_NAMES.validacionComposables,
+        component: () => import('@/modules/temas/pages/formularios/ValidacionComposablesPage.vue'),
+      },
+      {
+        path: 'formularios/dinamicos',
+        name: ROUTE_NAMES.formulariosDinamicos,
+        component: () => import('@/modules/temas/pages/formularios/FormulariosDinamicosPage.vue'),
+      },
+      {
+        path: 'formularios/useform',
+        name: ROUTE_NAMES.useForm,
+        component: () => import('@/modules/temas/pages/formularios/UseFormPage.vue'),
+      },
+      {
+        path: 'formularios/veevalidate',
+        name: ROUTE_NAMES.veeValidate,
+        component: () => import('@/modules/temas/pages/formularios/VeeValidatePage.vue'),
+      },
+      {
+        path: 'formularios/caso-practico',
+        name: ROUTE_NAMES.casoPractico,
+        component: () => import('@/modules/temas/pages/formularios/CasoPracticoPage.vue'),
       },
     ],
   },

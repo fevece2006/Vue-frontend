@@ -24,7 +24,7 @@ const arrayFrutas = ['Manzana', 'Banana', 'Sandía', 'Fresa', 'Cereza']
           <div class="box__body">
             <p class="demo">
               Resultado:
-              <span v-if="active" class="pill pill--ok">{{ name }}</span>
+              <span v-if="active" class="pill pill--ok">La variable active es true, por tanto muestra : {{ name }}</span>
               <span v-else class="pill pill--off">No se muestra (active = false)</span>
             </p>
           </div>
